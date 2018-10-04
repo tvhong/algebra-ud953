@@ -22,9 +22,6 @@ class Vector():
         else:
             return self._operate_on_other_vector(other, lambda a, b: a * b)
 
-    __radd__ = __add__
-    __rmul__ = __mul__
-
     def _operate_on_other_vector(self, other, operator):
         """
         Helps run the simple Vector operators.
@@ -40,6 +37,10 @@ class Vector():
 
     def __eq__(self, other):
         return self.coordinates == other.coordinates
+
+    __radd__ = __add__
+    __rmul__ = __mul__
+    __repr__ = __str__
 
 
 class VectorTest(unittest.TestCase):
