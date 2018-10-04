@@ -10,16 +10,27 @@ class Vector():
         self.dimension = len(coordinates)
 
     def __add__(self, other):
-        if self.dimension != other.dimension:
-            raise ValueError("Cannot add vectors with different dimensions.")
+        return self._operate_on_other(other, lambda a, b: a + b)
 
-        return Vector([a+b for a, b in zip(self.coordinates, other.coordinates)])
+    def __sub__(self, other):
+        return self._operate_on_other(other, lambda a, b: a - b)
+
+    def _operate_on_other(self, other, operator):
+        """
+        Helps run the simple Vector operators.
+        :param operator: function that takes (a, b) and returns a result.
+        """
+        if self.dimension != other.dimension:
+            raise ValueError("Cannot operate on vectors with different dimensions.")
+
+        return Vector([operator(a, b) for a, b in zip(self.coordinates, other.coordinates)])
 
     def __str__(self):
         return "Vector: {}".format(self.coordinates)
 
     def __eq__(self, other):
         return self.coordinates == other.coordinates
+
 
 class VectorTest(unittest.TestCase):
     """
@@ -52,6 +63,35 @@ class VectorTest(unittest.TestCase):
 
         v = Vector([0, 0, 0])
         self.assertEqual(v, v1 + v2)
+
+    def testSub2Vectors(self):
+        v1 = Vector([1, 2, 3])
+        v2 = Vector([3, 5, -4])
+
+        v = Vector([-2, -3, 7])
+        self.assertEqual(v, v1 - v2)
+
+    def testSubMultipleVectors(self):
+        v1 = Vector([1, 2, 3])
+        v2 = Vector([3, 5, -4])
+        v3 = Vector([0, 2, 2])
+
+        v = Vector([-2, -5, 5])
+        self.assertEqual(v, v1 - v2 - v3)
+
+    def testSubZero(self):
+        v0 = Vector([0, 0, 0])
+        v1 = Vector([1, 2, 3])
+
+        v = Vector([1, 2, 3])
+        self.assertEqual(v, v1 - v0)
+
+    def testSubSameVector(self):
+        v1 = Vector([1, 2, 3])
+        v2 = Vector([1, 2, 3])
+
+        v = Vector([0, 0, 0])
+        self.assertEqual(v, v1 - v2)
 
 if __name__ == '__main__':
     unittest.main()
