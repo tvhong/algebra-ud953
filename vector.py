@@ -1,3 +1,4 @@
+import numbers
 import unittest
 
 
@@ -10,12 +11,21 @@ class Vector():
         self.dimension = len(coordinates)
 
     def __add__(self, other):
-        return self._operate_on_other(other, lambda a, b: a + b)
+        return self._operate_on_other_vector(other, lambda a, b: a + b)
 
     def __sub__(self, other):
-        return self._operate_on_other(other, lambda a, b: a - b)
+        return self._operate_on_other_vector(other, lambda a, b: a - b)
 
-    def _operate_on_other(self, other, operator):
+    def __mul__(self, other):
+        if isinstance(other, numbers.Real):
+            return Vector([other*x for x in self.coordinates])
+        else:
+            return self._operate_on_other_vector(other, lambda a, b: a * b)
+
+    __radd__ = __add__
+    __rmul__ = __mul__
+
+    def _operate_on_other_vector(self, other, operator):
         """
         Helps run the simple Vector operators.
         :param operator: function that takes (a, b) and returns a result.
@@ -92,6 +102,63 @@ class VectorTest(unittest.TestCase):
 
         v = Vector([0, 0, 0])
         self.assertEqual(v, v1 - v2)
+
+    def testMul2Vectors(self):
+        v1 = Vector([1, 2, 3])
+        v2 = Vector([3, 2, 1])
+
+        v = Vector([3, 4, 3])
+        self.assertEqual(v, v1 * v2)
+
+    def testMulMultipleVectors(self):
+        v1 = Vector([1, 2, 3])
+        v2 = Vector([3, 2, 1])
+        v3 = Vector([2, 2, 2])
+
+        v = Vector([6, 8, 6])
+        self.assertEqual(v, v1 * v2 * v3)
+
+    def testMulWithIdentityVector(self):
+        v1 = Vector([1, 2, 3])
+        v2 = Vector([1, 1, 1])
+
+        v = Vector([1, 2, 3])
+        self.assertEqual(v, v1 * v2)
+
+    def testMulWithZeroVector(self):
+        v0 = Vector([0, 0, 0])
+        v1 = Vector([1, 2, 3])
+
+        self.assertEqual(v0, v1 * v0)
+
+    def testMulWithARealNumber(self):
+        v1 = Vector([1, 2, 3])
+        coefficient = 1.111
+
+        v = Vector([1.111, 2.222, 3.333])
+        self.assertEqual(v, coefficient * v1)
+
+    def testMulWithZero(self):
+        v1 = Vector([1, 2, 3])
+        coefficient = 0
+
+        v = Vector([0, 0, 0])
+        self.assertEqual(v, coefficient * v1)
+
+    def testMulWithOne(self):
+        v1 = Vector([1, 2, 3])
+        coefficient = 1
+
+        v = Vector([1, 2, 3])
+        self.assertEqual(v, coefficient * v1)
+
+    def testMulWithNegativeNumber(self):
+        v1 = Vector([1, 2, 3])
+        coefficient = -1
+
+        v = Vector([-1, -2, -3])
+        self.assertEqual(v, coefficient * v1)
+
 
 if __name__ == '__main__':
     unittest.main()
