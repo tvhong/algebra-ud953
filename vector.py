@@ -1,5 +1,6 @@
 import numbers
 import unittest
+from decimal import Decimal
 
 
 class Vector():
@@ -7,7 +8,7 @@ class Vector():
         if not coordinates:
             raise ValueError("Coordinates is required.")
 
-        self.coordinates = tuple(coordinates)
+        self.coordinates = tuple([Decimal(str(x)) for x in coordinates])
         self.dimension = len(coordinates)
 
     def __add__(self, other):
@@ -18,6 +19,7 @@ class Vector():
 
     def __mul__(self, other):
         if isinstance(other, numbers.Real):
+            other = Decimal(str(other))
             return Vector([other*x for x in self.coordinates])
         else:
             return self._operate_on_other_vector(other, lambda a, b: a * b)
@@ -33,7 +35,7 @@ class Vector():
         return Vector([operator(a, b) for a, b in zip(self.coordinates, other.coordinates)])
 
     def __str__(self):
-        return "Vector: {}".format(self.coordinates)
+        return "Vector: {}".format([str(x) for x in self.coordinates])
 
     def __eq__(self, other):
         return self.coordinates == other.coordinates
