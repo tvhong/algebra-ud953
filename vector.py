@@ -1,15 +1,24 @@
+import math
 import numbers
 import unittest
+
 from decimal import Decimal
 
 
 class Vector():
+    """
+    A class that represents Vectors.
+    
+    This should be treated as an immutable class.
+    """
+
     def __init__(self, coordinates):
         if not coordinates:
             raise ValueError("Coordinates is required.")
 
         self.coordinates = tuple([Decimal(str(x)) for x in coordinates])
         self.dimension = len(coordinates)
+        self.magnitude = math.sqrt(sum(x*x for x in self.coordinates))
 
     def __add__(self, other):
         return self._operate_on_other_vector(other, lambda a, b: a + b)
@@ -162,6 +171,17 @@ class VectorTest(unittest.TestCase):
         v = Vector([-1, -2, -3])
         self.assertEqual(v, coefficient * v1)
 
+    def testMagnitudeForZeroVector(self):
+        v = Vector([0, 0, 0])
+        self.assertEqual(0, v.magnitude)
+
+    def testMagnitudeForSimple2DVector(self):
+        v = Vector([1, 1])
+        self.assertEqual(math.sqrt(2), v.magnitude)
+
+    def testMagnitudeWithNegativeCoordinates(self):
+        v = Vector([1, -1, -2])
+        self.assertEqual(math.sqrt(6), v.magnitude)
 
 if __name__ == '__main__':
     unittest.main()
