@@ -11,6 +11,8 @@ class Vector():
     This should be treated as an immutable class.
     """
 
+    PRECISION_DELTA = Decimal('0.0001')
+
     _magnitude = None
     _unit = None
 
@@ -76,7 +78,13 @@ class Vector():
         return "Vector: {}".format([str(x) for x in self.coordinates])
 
     def __eq__(self, other):
-        return self.coordinates == other.coordinates
+        return (
+            self.dimension == other.dimension and
+            all(
+                abs(x - y) <= self.PRECISION_DELTA
+                for x, y in zip(self.coordinates, other.coordinates)
+            )
+        )
 
     __radd__ = __add__
     __rmul__ = __mul__

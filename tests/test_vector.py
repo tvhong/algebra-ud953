@@ -134,7 +134,7 @@ class VectorTest(unittest.TestCase):
     def testUnitWorks(self):
         v1 = Vector([2, -5, 3, 4])
 
-        v = 1/v1.magnitude * v1
+        v = Vector(['0.2722', '-0.6804', '0.4082', '0.5443'])
         self.assertEqual(v, v1.unit)
 
     def testUnitRaisesExeptionForZeroVector(self):
