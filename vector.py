@@ -12,6 +12,7 @@ class Vector():
     """
 
     _magnitude = None
+    _unit = None
 
     def __init__(self, coordinates):
         if not coordinates:
@@ -26,6 +27,19 @@ class Vector():
             self._magnitude = math.sqrt(sum(x*x for x in self.coordinates))
 
         return self._magnitude
+
+    @property
+    def unit(self):
+        """
+        Get the unit vector from this vector.
+        """
+        if self._unit is None:
+            if self.magnitude == 0:
+                raise TypeError("Zero vector does not have unit vector")
+
+            self._unit = 1 / self.magnitude * self
+
+        return self._unit
 
     def __add__(self, other):
         return self._operate_on_other_vector(other, lambda a, b: a + b)

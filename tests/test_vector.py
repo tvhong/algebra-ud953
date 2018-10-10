@@ -131,5 +131,21 @@ class VectorTest(unittest.TestCase):
         v = Vector([1, -1, -2])
         self.assertEqual(math.sqrt(6), v.magnitude)
 
+    def testUnitWorks(self):
+        v1 = Vector([2, -5, 3, 4])
+
+        v = 1/v1.magnitude * v1
+        self.assertEqual(v, v1.unit)
+
+    def testUnitRaisesExeptionForZeroVector(self):
+        v = Vector([0, 0, 0])
+        with self.assertRaisesRegex(TypeError, '[Zz]ero'):
+            v.unit
+
+    def testUnitReturnsSameVectorForAUnitVector(self):
+        v = Vector([1, 0, 0])
+        self.assertEqual(v, v.unit)
+
+
 if __name__ == '__main__':
     unittest.main()
