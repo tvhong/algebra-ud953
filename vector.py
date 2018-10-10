@@ -45,10 +45,10 @@ class Vector():
         Get the unit vector from this vector.
         """
         if self._unit is None:
-            if self.magnitude == 0:
-                raise TypeError("Zero vector does not have unit vector")
-
-            self._unit = 1 / self.magnitude * self
+            try:
+                self._unit = 1 / self.magnitude * self
+            except ZeroDivisionError:
+                raise TypeError("Cannot normalize the zero vector")
 
         return self._unit
 
