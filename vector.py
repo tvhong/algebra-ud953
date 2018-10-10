@@ -18,8 +18,16 @@ class Vector():
         if not coordinates:
             raise ValueError("Coordinates is required.")
 
-        self.coordinates = tuple([Decimal(str(x)) for x in coordinates])
-        self.dimension = len(coordinates)
+        self._coordinates = tuple([Decimal(str(x)) for x in coordinates])
+        self._dimension = len(coordinates)
+
+    @property
+    def coordinates(self):
+        return self._coordinates
+
+    @property
+    def dimension(self):
+        return self._dimension
 
     @property
     def magnitude(self):
