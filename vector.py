@@ -2,6 +2,7 @@ import math
 import numbers
 
 from decimal import Decimal
+from decimal import ROUND_HALF_UP
 
 
 class Vector():
@@ -75,7 +76,11 @@ class Vector():
         return Vector([operator(a, b) for a, b in zip(self.coordinates, other.coordinates)])
 
     def __str__(self):
-        return "Vector: {}".format([str(x) for x in self.coordinates])
+        formatted_coordinates = [
+            str(x.quantize(self.PRECISION_DELTA, rounding=ROUND_HALF_UP))
+            for x in self._coordinates
+        ]
+        return "Vector({})".format(formatted_coordinates)
 
     def __eq__(self, other):
         return (
