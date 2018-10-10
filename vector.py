@@ -7,9 +7,11 @@ from decimal import Decimal
 class Vector():
     """
     A class that represents Vectors.
-    
+
     This should be treated as an immutable class.
     """
+
+    _magnitude = None
 
     def __init__(self, coordinates):
         if not coordinates:
@@ -17,7 +19,13 @@ class Vector():
 
         self.coordinates = tuple([Decimal(str(x)) for x in coordinates])
         self.dimension = len(coordinates)
-        self.magnitude = math.sqrt(sum(x*x for x in self.coordinates))
+
+    @property
+    def magnitude(self):
+        if self._magnitude is None:
+            self._magnitude = math.sqrt(sum(x*x for x in self.coordinates))
+
+        return self._magnitude
 
     def __add__(self, other):
         return self._operate_on_other_vector(other, lambda a, b: a + b)
